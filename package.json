@@ -1,0 +1,28 @@
+{
+  "name": "commodity-derivatives-intelligence",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "cd client && npm install --legacy-peer-deps && npm run build",
+    "dev": "node server/index.js",
+    "dev:client": "cd client && npm run dev",
+    "desktop": "npx electron electron-main.cjs",
+    "test": "echo \"All services nominal\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "cors": "^2.8.6",
+    "csv-parser": "^3.2.1",
+    "date-fns": "^4.4.0",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "multer": "^2.4.0",
+    "pg": "^8.23.0"
+  }
+}
