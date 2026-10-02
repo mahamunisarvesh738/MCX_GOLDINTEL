@@ -1,6 +1,10 @@
-const { Pool } = require('pg');
+const pg = require('pg');
+const { Pool } = pg;
 const fs = require('fs');
 const path = require('path');
+
+// Configure pg type parser for DATE OID 1082 to preserve YYYY-MM-DD strings
+pg.types.setTypeParser(1082, val => val);
 
 let pool = null;
 let isPostgres = false;

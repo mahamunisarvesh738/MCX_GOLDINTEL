@@ -211,6 +211,46 @@ async function computeAllPairAnalytics() {
         regimeDescription: regimeObj.description
       };
 
+      allResults.push(entry);
+    }
+  }
+
+  // Clear existing pair analytics if re-computing
+  await db.query('DELETE FROM pair_analytics');
+
+  if (db.isPostgres()) {
+    // Fast multi-row batch insert into PostgreSQL
+    const chunkSize = 150;
+    for (let i = 0; i < allResults.length; i += chunkSize) {
+      const chunk = allResults.slice(i, i + chunkSize);
+      const tuples = [];
+      const params = [];
+      let pIdx = 1;
+
+      for (const entry of chunk) {
+        tuples.push(`($${pIdx}, $${pIdx+1}, $${pIdx+2}, $${pIdx+3}, $${pIdx+4}, $${pIdx+5}, $${pIdx+6}, $${pIdx+7}, $${pIdx+8}, $${pIdx+9}, $${pIdx+10}, $${pIdx+11}, $${pIdx+12}, $${pIdx+13}, $${pIdx+14}, $${pIdx+15}, $${pIdx+16}, $${pIdx+17}, $${pIdx+18})`);
+        params.push(
+          entry.tradeDate, entry.pairName, entry.contractA, entry.contractB,
+          entry.priceANorm, entry.priceBNorm, entry.spread, entry.spreadPct,
+          entry.rollingMean20d, entry.rollingStd20d, entry.zScore20d,
+          entry.rollingMean60d, entry.rollingStd60d, entry.zScore60d,
+          entry.conveniencePremium, entry.liquidityScoreA, entry.liquidityScoreB,
+          entry.isExecutableEdge, entry.regime
+        );
+        pIdx += 19;
+      }
+
+      await db.query(
+        `INSERT INTO pair_analytics 
+         (trade_date, pair_name, contract_a, contract_b, price_a_norm, price_b_norm, spread, spread_pct,
+          rolling_mean_20d, rolling_std_20d, z_score_20d, rolling_mean_60d, rolling_std_60d, z_score_60d,
+          convenience_premium, liquidity_score_a, liquidity_score_b, is_executable_edge, regime)
+         VALUES ${tuples.join(', ')}`,
+        params
+      );
+    }
+  } else {
+    for (const entry of allResults) {
       await db.query(
         `INSERT INTO pair_analytics 
          (trade_date, pair_name, contract_a, contract_b, price_a_norm, price_b_norm, spread, spread_pct,
@@ -226,8 +266,6 @@ async function computeAllPairAnalytics() {
           entry.isExecutableEdge, entry.regime
         ]
       );
-
-      allResults.push(entry);
     }
   }
 
