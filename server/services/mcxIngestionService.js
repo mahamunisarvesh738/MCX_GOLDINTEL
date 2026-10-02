@@ -177,11 +177,20 @@ function calculateContractLifecycleState(tradeDateStr, expiryDateStr) {
  * Ingest records into database (raw + normalized)
  */
 async function ingestRecords(records) {
+  const { computeAllPairAnalytics } = require('./relativeValueService');
   const inserted = [];
   for (const r of records) {
     const rawRes = await db.query(
       `INSERT INTO bhavcopy_raw (symbol, trade_date, expiry_date, open, high, low, close, volume, open_interest, source)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       ON CONFLICT (symbol, trade_date, expiry_date) DO UPDATE SET
+         open = EXCLUDED.open,
+         high = EXCLUDED.high,
+         low = EXCLUDED.low,
+         close = EXCLUDED.close,
+         volume = EXCLUDED.volume,
+         open_interest = EXCLUDED.open_interest,
+         source = EXCLUDED.source
        RETURNING id`,
       [r.symbol, r.tradeDate, r.expiryDate, r.open, r.high, r.low, r.close, r.volume, r.openInterest, 'MCX_BHAVCOPY']
     );
@@ -196,7 +205,16 @@ async function ingestRecords(records) {
     await db.query(
       `INSERT INTO normalized_derivatives 
        (raw_id, symbol, trade_date, expiry_date, days_to_expiry, is_tender_period, raw_close, price_norm_10g_999, norm_volume_10g, norm_oi_10g, lot_value_inr)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       ON CONFLICT (symbol, trade_date, expiry_date) DO UPDATE SET
+         raw_id = EXCLUDED.raw_id,
+         days_to_expiry = EXCLUDED.days_to_expiry,
+         is_tender_period = EXCLUDED.is_tender_period,
+         raw_close = EXCLUDED.raw_close,
+         price_norm_10g_999 = EXCLUDED.price_norm_10g_999,
+         norm_volume_10g = EXCLUDED.norm_volume_10g,
+         norm_oi_10g = EXCLUDED.norm_oi_10g,
+         lot_value_inr = EXCLUDED.lot_value_inr`,
       [rawId, r.symbol, r.tradeDate, r.expiryDate, daysToExpiry, isTenderPeriod, r.close, priceNorm, normVol, normOI, lotValue]
     );
 
@@ -209,6 +227,13 @@ async function ingestRecords(records) {
       normOI,
       lotValue
     });
+  }
+
+  // Re-calculate analytics & rolling metrics after ingestion
+  try {
+    await computeAllPairAnalytics();
+  } catch (e) {
+    console.warn('Post-ingestion pair analytics re-computation warning:', e.message);
   }
 
   return inserted;

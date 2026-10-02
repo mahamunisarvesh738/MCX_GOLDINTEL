@@ -233,7 +233,15 @@ async function seedHistoricalData() {
 
       const bhavRes = await db.query(
         `INSERT INTO bhavcopy_raw (symbol, trade_date, expiry_date, open, high, low, close, volume, open_interest, source)
-         VALUES ${bTuples.join(', ')} RETURNING id`,
+         VALUES ${bTuples.join(', ')}
+         ON CONFLICT (symbol, trade_date, expiry_date) DO UPDATE SET
+           open = EXCLUDED.open,
+           high = EXCLUDED.high,
+           low = EXCLUDED.low,
+           close = EXCLUDED.close,
+           volume = EXCLUDED.volume,
+           open_interest = EXCLUDED.open_interest
+         RETURNING id`,
         bParams
       );
 
@@ -263,7 +271,16 @@ async function seedHistoricalData() {
       await db.query(
         `INSERT INTO normalized_derivatives 
          (raw_id, symbol, trade_date, expiry_date, days_to_expiry, is_tender_period, raw_close, price_norm_10g_999, norm_volume_10g, norm_oi_10g, lot_value_inr)
-         VALUES ${nTuples.join(', ')}`,
+         VALUES ${nTuples.join(', ')}
+         ON CONFLICT (symbol, trade_date, expiry_date) DO UPDATE SET
+           raw_id = EXCLUDED.raw_id,
+           days_to_expiry = EXCLUDED.days_to_expiry,
+           is_tender_period = EXCLUDED.is_tender_period,
+           raw_close = EXCLUDED.raw_close,
+           price_norm_10g_999 = EXCLUDED.price_norm_10g_999,
+           norm_volume_10g = EXCLUDED.norm_volume_10g,
+           norm_oi_10g = EXCLUDED.norm_oi_10g,
+           lot_value_inr = EXCLUDED.lot_value_inr`,
         nParams
       );
     } else {
