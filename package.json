@@ -1,11 +1,11 @@
 {
   "name": "commodity-derivatives-intelligence",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "MCX Bullion Commodity Derivatives Intelligence Terminal",
+  "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
-    "build": "cd client && npm install --legacy-peer-deps && npm run build",
+    "build": "cd client && npm install --include=dev --legacy-peer-deps && npm run build",
     "dev": "node server/index.js",
     "dev:client": "cd client && npm run dev",
     "desktop": "npx electron electron-main.cjs",
