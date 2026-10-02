@@ -1,4 +1,4 @@
--- MCX Bullion Derivatives Intelligence Database Schema (PostgreSQL)
+-- MCX Goldintel Derivatives Intelligence Database Schema (PostgreSQL)
 
 CREATE TABLE IF NOT EXISTS contracts (
     symbol VARCHAR(20) PRIMARY KEY,

@@ -23,7 +23,7 @@ export default function Header({ latestMarket, onRefresh, isRefreshing }) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold tracking-tight text-white m-0">MCX BULLION<span className="text-amber-400 font-extrabold">INTEL</span></h1>
+              <h1 className="text-xl font-bold tracking-tight text-white m-0">GOLD<span className="text-amber-400 font-extrabold">INTEL</span></h1>
               <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 font-semibold">PROTOTYPE</span>
             </div>
             <p className="text-xs text-slate-400 font-medium m-0">Commodity Derivatives Cross-Contract Intelligence Terminal</p>

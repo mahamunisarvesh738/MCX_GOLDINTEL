@@ -1,10 +1,10 @@
-# MCX BullionIntel | Commodity Derivatives Intelligence Terminal
+# GOLDINTEL | Commodity Derivatives Intelligence Terminal
 
 [![Stack](https://img.shields.io/badge/Stack-PERN%20(PostgreSQL%20%7C%20Express%20%7C%20React%20%7C%20Node)-06b6d4?style=for-the-badge)](https://github.com)
 [![Status](https://img.shields.io/badge/Status-Hackathon%20Prototype%20Ready-emerald?style=for-the-badge)](https://github.com)
 [![Deployment](https://img.shields.io/badge/Deploy-Render%201--Click-f59e0b?style=for-the-badge)](https://render.com)
 
-**MCX BullionIntel** is an institutional-grade commodity derivatives intelligence platform engineered for India's Multi Commodity Exchange (MCX). It solves the fundamental quantitative challenge in precious metals trading: **identifying, measuring, and responsibly analyzing relative pricing differences between contracts representing the exact same underlying metal (Gold).**
+**GOLDINTEL** is an institutional-grade commodity derivatives intelligence platform engineered for India's Multi Commodity Exchange (MCX). It solves the fundamental quantitative challenge in precious metals trading: **identifying, measuring, and responsibly analyzing relative pricing differences between contracts representing the exact same underlying metal (Gold).**
 
 MCX lists gold futures across multiple contract sizes and specifications—`GOLDM` (100g), `GOLDTEN` (10g), `GOLDGUINEA` (8g), `GOLDPETAL` (1g), and benchmark `GOLD` (1kg). While these contracts represent the same physical asset, their settlement prices frequently diverge due to quotation unit differences, purity differentials (995 vs 999), retail convenience markups, financing carry mismatches, and delivery tender period spikes.
 
@@ -186,7 +186,7 @@ This repository contains a native **Render Blueprint (`render.yaml`)** that sets
 
 ## 🏆 Hackathon Evaluation Summary
 
-| Hackathon Criterion | MCX BullionIntel Solution |
+| Hackathon Criterion | GOLDINTEL Solution |
 | :--- | :--- |
 | **Cross-Contract Normalization** | Exact formula adjusting 995 vs 999 purity & quotation units to INR/10g 999 Fine Gold. |
 | **Futures Curve & Carry** | Contango/backwardation analytics, implied repo rates, and roll-down vs curve shift separation. |

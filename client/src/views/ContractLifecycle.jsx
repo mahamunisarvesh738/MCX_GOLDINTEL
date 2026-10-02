@@ -221,7 +221,7 @@ export default function ContractLifecycle() {
                       {c.phaseBadge}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-slate-400 font-sans max-w-xs">{c.rollRecommendation}</td>
+                  <td className="py-3 px-4 text-slate-400 font-sans max-w-xs break-words leading-relaxed">{c.rollRecommendation}</td>
                 </tr>
               ))}
             </tbody>

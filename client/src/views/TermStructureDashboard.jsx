@@ -99,10 +99,15 @@ export default function TermStructureDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Curve Structure"
-            value={currentSummary.structure}
+            value={
+              currentSummary.structure === 'CONTANGO' ? 'Contango' :
+              currentSummary.structure === 'BACKWARDATION' ? 'Backwardation' :
+              currentSummary.structure === 'SINGLE_MONTH' ? 'Single Month' :
+              currentSummary.structure
+            }
             subtitle={currentSummary.structure === 'CONTANGO' ? 'Futures trading at a carry premium to spot' : 'Backwardation / Inverted curve'}
             trend={currentSummary.structure === 'CONTANGO' ? 'up' : 'down'}
-            badge={currentSummary.structure}
+            badge={currentSummary.structure === 'CONTANGO' ? 'Contango' : currentSummary.structure === 'BACKWARDATION' ? 'Backwardation' : 'Normal'}
           />
 
           <StatCard

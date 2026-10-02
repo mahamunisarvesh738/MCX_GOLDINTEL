@@ -182,7 +182,14 @@ export default function RelativeValueDashboard() {
 
           <StatCard
             title="Signal & Liquidity Regime"
-            value={currentPairData.regime || 'EVALUATING'}
+            value={
+              currentPairData.regime === 'ACTIONABLE_EDGE' ? 'Actionable Edge' :
+              currentPairData.regime === 'NOISE_SUPPRESSED' ? 'Noise Suppressed' :
+              currentPairData.regime === 'COST_DOMINATED' ? 'Cost Dominated' :
+              currentPairData.regime === 'ILLIQUID_TRAP' ? 'Illiquid Trap' :
+              currentPairData.regime === 'TENDER_RISK' ? 'Tender Risk' :
+              (currentPairData.regime || 'Evaluating')
+            }
             subtitle={currentPairData.is_executable_edge ? 'Actionable net edge survives friction' : 'Alert suppressed by safety hurdles'}
             trend={currentPairData.is_executable_edge ? 'up' : 'down'}
           />

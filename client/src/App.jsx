@@ -67,7 +67,7 @@ export default function App() {
       <footer className="border-t border-slate-800/80 bg-[#070a12] py-4 px-6 text-xs font-mono text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="text-slate-400 font-semibold">MCX Bullion Commodity Derivatives Intelligence Terminal</span>
+            <span className="text-slate-400 font-semibold">GOLDINTEL Terminal</span>
             <span className="text-slate-700">|</span>
             <span>PERN Stack (PostgreSQL, Express, React, Node.js)</span>
           </div>

@@ -57,7 +57,13 @@ export default function IntelligenceSignals() {
           }`} />
           <div>
             <div className="text-xs font-mono uppercase tracking-wider text-slate-400">Current Intelligence Regime</div>
-            <div className="text-sm font-bold text-white font-mono">{data?.systemRegime || 'EFFICIENT_PRICING_EQUILIBRIUM'}</div>
+            <div className="text-sm font-bold text-white font-mono">
+              {data?.systemRegime === 'ACTIONABLE_DISLOCATION_DETECTED'
+                ? 'Actionable Dislocation Detected'
+                : data?.systemRegime === 'FRICTION_DOMINATED'
+                ? 'Friction Dominated (Capital Protected)'
+                : 'Efficient Pricing Equilibrium (Signals Suppressed)'}
+            </div>
           </div>
         </div>
         <p className="text-xs text-slate-300 font-sans max-w-xl text-right m-0 hidden md:block">
@@ -128,14 +134,14 @@ export default function IntelligenceSignals() {
               >
                 <div>
                   {/* Top Bar */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="font-bold font-mono text-sm text-white m-0">{p.pair_name}</h4>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                    <div className="min-w-0">
+                      <h4 className="font-bold font-mono text-sm text-white m-0 truncate">{p.pair_name}</h4>
                       <span className="text-[11px] text-slate-400 font-mono">
                         {p.contract_a} (₹{parseFloat(p.price_a_norm).toLocaleString()}) vs {p.contract_b} (₹{parseFloat(p.price_b_norm).toLocaleString()})
                       </span>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold border ${
+                    <span className={`self-start sm:self-auto px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold border whitespace-nowrap ${
                       isActionable
                         ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                         : isCostMuted
@@ -190,7 +196,7 @@ export default function IntelligenceSignals() {
                 </div>
 
                 {/* Footer Recommendation */}
-                <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs font-mono">
+                <div className="mt-4 pt-3 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                   <span className="text-slate-400">Quant Action:</span>
                   <span className={`font-bold ${isActionable ? 'text-emerald-400' : 'text-slate-400'}`}>
                     {p.recommendation}

@@ -12,7 +12,7 @@ function createWindow() {
     height: 900,
     minWidth: 1024,
     minHeight: 700,
-    title: 'MCX Bullion Commodity Derivatives Intelligence Terminal',
+    title: 'MCX Goldintel - Commodity Derivatives Intelligence Terminal',
     backgroundColor: '#080c14',
     webPreferences: {
       nodeIntegration: false,

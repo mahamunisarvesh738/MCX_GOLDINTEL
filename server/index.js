@@ -34,7 +34,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'MCX Bullion Commodity Derivatives Intelligence',
+    service: 'GOLDINTEL Commodity Derivatives Intelligence',
     version: '1.0.0'
   });
 });
@@ -54,7 +54,7 @@ app.use((req, res) => {
     res.sendFile(indexFile);
   } else {
     res.json({
-      message: 'MCX Commodity Derivatives Intelligence API Server is Running',
+      message: 'GOLDINTEL Commodity Derivatives Intelligence API Server is Running',
       apiDocs: '/api/health',
       frontend: 'Frontend build not found at static path. Run npm run build in client/'
     });
@@ -63,13 +63,13 @@ app.use((req, res) => {
 
 async function startServer() {
   try {
-    console.log('🚀 Starting MCX Bullion Derivatives Intelligence Server...');
+    console.log('🚀 Starting GOLDINTEL Server...');
     await initDb();
     await seedHistoricalData();
 
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`=======================================================`);
-      console.log(`📡 Bullion Derivatives Intelligence Server Live on PORT ${PORT}`);
+      console.log(`📡 GOLDINTEL Commodity Derivatives Intelligence Server Live on PORT ${PORT}`);
       console.log(`🌐 Local URL: http://localhost:${PORT}`);
       console.log(`=======================================================`);
     });
