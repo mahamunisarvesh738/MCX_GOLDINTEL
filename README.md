@@ -184,9 +184,9 @@ This repository contains a native **Render Blueprint (`render.yaml`)** that sets
 
 ---
 
-## 🏆 Hackathon Evaluation Summary
+##  Evaluation Summary
 
-| Hackathon Criterion | GOLDINTEL Solution |
+| Criterion | GOLDINTEL Solution |
 | :--- | :--- |
 | **Cross-Contract Normalization** | Exact formula adjusting 995 vs 999 purity & quotation units to INR/10g 999 Fine Gold. |
 | **Futures Curve & Carry** | Contango/backwardation analytics, implied repo rates, and roll-down vs curve shift separation. |
