@@ -22,6 +22,8 @@
     "date-fns": "^4.4.0",
     "dotenv": "^18.0.4",
     "express": "^5.2.1",
+    "google-auth-library": "^11.2.0",
+    "jsonwebtoken": "^9.0.3",
     "multer": "^2.4.0",
     "pg": "^8.23.0"
   }

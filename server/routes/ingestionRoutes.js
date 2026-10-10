@@ -4,9 +4,10 @@ const multer = require('multer');
 const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB limit
 const { parseBhavcopyText, validateRequestedVsReturnedDate, ingestRecords } = require('../services/mcxIngestionService');
 const { computeAllPairAnalytics } = require('../services/relativeValueService');
+const { verifyToken } = require('../middleware/authMiddleware');
 
-// Upload and ingest Bhavcopy CSV
-router.post('/upload-csv', upload.single('file'), async (req, res) => {
+// Upload and ingest Bhavcopy CSV (Protected - User Login Required)
+router.post('/upload-csv', verifyToken, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, error: 'No file uploaded.' });

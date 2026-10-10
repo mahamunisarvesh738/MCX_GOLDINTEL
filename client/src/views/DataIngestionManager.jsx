@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { api } from '../services/api';
-import { Database, Upload, AlertTriangle, CheckCircle, Info, ShieldCheck, FileText, ArrowRight } from 'lucide-react';
+import { Database, Upload, AlertTriangle, CheckCircle, Info, ShieldCheck, FileText, ArrowRight, Lock } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function DataIngestionManager({ onDataIngested }) {
+  const { isAuthenticated } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState(null);
@@ -102,33 +104,52 @@ export default function DataIngestionManager({ onDataIngested }) {
             The system automatically trims space-padded symbols, parses compact expiries, normalizes all gold contracts to INR/10g 999, and calculates rolling pair z-scores.
           </p>
 
-          <div className="border-2 border-dashed border-slate-700/80 hover:border-amber-500/60 rounded-xl p-6 text-center transition bg-slate-950/40">
-            <FileText className="w-8 h-8 text-slate-500 mx-auto mb-2" />
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileChange}
-              className="hidden"
-              id="bhavcopy-file-upload"
-            />
-            <label
-              htmlFor="bhavcopy-file-upload"
-              className="inline-block px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono cursor-pointer transition border border-slate-700 mb-2"
-            >
-              Browse MCX Bhavcopy CSV
-            </label>
-            <div className="text-xs font-mono text-slate-400">
-              {selectedFile ? selectedFile.name : 'Drag & drop file or click to select'}
+          {!isAuthenticated ? (
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2 text-center">
+              <div className="flex items-center justify-center gap-2 font-bold text-xs font-mono text-amber-400">
+                <Lock className="w-4 h-4" />
+                <span>PROFILE AUTHENTICATION REQUIRED</span>
+              </div>
+              <p className="text-xs text-slate-300 m-0">
+                To prevent public overwrite of exchange datasets, uploading Bhavcopy CSV files is restricted to authenticated profiles.
+              </p>
+              <div className="pt-1">
+                <span className="text-[11px] font-mono text-amber-400 underline cursor-pointer" onClick={() => document.querySelector('header button')?.click()}>
+                  Click "Sign In Profile" in the top header to authenticate →
+                </span>
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="border-2 border-dashed border-slate-700/80 hover:border-amber-500/60 rounded-xl p-6 text-center transition bg-slate-950/40">
+                <FileText className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="bhavcopy-file-upload"
+                />
+                <label
+                  htmlFor="bhavcopy-file-upload"
+                  className="inline-block px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono cursor-pointer transition border border-slate-700 mb-2"
+                >
+                  Browse MCX Bhavcopy CSV
+                </label>
+                <div className="text-xs font-mono text-slate-400">
+                  {selectedFile ? selectedFile.name : 'Drag & drop file or click to select'}
+                </div>
+              </div>
 
-          <button
-            onClick={handleUpload}
-            disabled={!selectedFile || uploading}
-            className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition cursor-pointer disabled:opacity-40 shadow-sm"
-          >
-            {uploading ? 'Ingesting and Computing Spreads...' : 'Ingest and Process Contracts'}
-          </button>
+              <button
+                onClick={handleUpload}
+                disabled={!selectedFile || uploading}
+                className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition cursor-pointer disabled:opacity-40 shadow-sm"
+              >
+                {uploading ? 'Ingesting and Computing Spreads...' : 'Ingest and Process Contracts'}
+              </button>
+            </>
+          )}
 
           {uploadMessage && (
             <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">

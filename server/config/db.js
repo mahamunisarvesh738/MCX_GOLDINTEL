@@ -10,6 +10,7 @@ let pool = null;
 let isPostgres = false;
 let embeddedData = {
   contracts: [],
+  users: [],
   bhavcopy_raw: [],
   normalized_derivatives: [],
   pair_analytics: [],
@@ -144,6 +145,7 @@ function handleEmbeddedSelect(sql, params) {
   else if (lower.includes('from pair_analytics')) table = 'pair_analytics';
   else if (lower.includes('from backtest_runs')) table = 'backtest_runs';
   else if (lower.includes('from contracts')) table = 'contracts';
+  else if (lower.includes('from users')) table = 'users';
 
   if (!table || !embeddedData[table]) {
     return { rows: [], rowCount: 0 };
@@ -156,8 +158,16 @@ function handleEmbeddedSelect(sql, params) {
     if (lower.includes('where symbol = $1') && params[0]) {
       list = list.filter(r => r.symbol === params[0]);
     }
+    if (lower.includes('where google_id = $1') && params[0]) {
+      list = list.filter(r => r.google_id === params[0]);
+    }
+    if (lower.includes('where email = $1') && params[0]) {
+      list = list.filter(r => r.email === params[0]);
+    }
+    if (lower.includes('where id = $1') && params[0]) {
+      list = list.filter(r => r.id === params[0]);
+    }
     if (lower.includes('trade_date = $') || lower.includes('trade_date =')) {
-      // Find date param
       const dateParam = params.find(p => typeof p === 'string' && /^\d{4}-\d{2}-\d{2}/.test(p));
       if (dateParam) {
         list = list.filter(r => r.trade_date === dateParam);
@@ -197,13 +207,33 @@ function handleEmbeddedInsert(sql, params) {
   else if (lower.includes('into pair_analytics')) table = 'pair_analytics';
   else if (lower.includes('into backtest_runs')) table = 'backtest_runs';
   else if (lower.includes('into contracts')) table = 'contracts';
+  else if (lower.includes('into users')) table = 'users';
 
   if (!table) return { rows: [], rowCount: 0 };
 
   const id = (embeddedData[table].length > 0 ? Math.max(...embeddedData[table].map(x => x.id || 0)) : 0) + 1;
   let newRecord = { id };
 
-  if (table === 'bhavcopy_raw') {
+  if (table === 'users') {
+    // google_id, email, name, picture, role
+    newRecord = {
+      id,
+      google_id: params[0],
+      email: params[1],
+      name: params[2],
+      picture: params[3],
+      role: params[4] || 'ANALYST',
+      created_at: new Date().toISOString(),
+      last_login: new Date().toISOString()
+    };
+    const existingIdx = embeddedData[table].findIndex(r => r.email === newRecord.email || (r.google_id && r.google_id === newRecord.google_id));
+    if (existingIdx >= 0) {
+      embeddedData[table][existingIdx] = { ...embeddedData[table][existingIdx], ...newRecord, last_login: new Date().toISOString() };
+      newRecord = embeddedData[table][existingIdx];
+    } else {
+      embeddedData[table].push(newRecord);
+    }
+  } else if (table === 'bhavcopy_raw') {
     // symbol, trade_date, expiry_date, open, high, low, close, volume, open_interest, source
     newRecord = {
       id,
